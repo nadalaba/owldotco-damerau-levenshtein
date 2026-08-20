@@ -152,6 +152,8 @@ MinCostSubstringStruct levenshteinDistance(
 
     for (int row = 1; row <= sourceLength; row++)
     {
+        // TODO Unicode?
+        _char_type sourceElement = source[row - 1];
         int lastColMatch = -1;
 
         for (int column = 1; column <= targetLength; column++)
@@ -160,7 +162,6 @@ MinCostSubstringStruct levenshteinDistance(
             double costToDelete = distanceMatrix[row - 1][column].cost + options.deletion_cost;
 
             // TODO Unicode?
-            _char_type sourceElement = source[row - 1];
             _char_type targetElement = target[column - 1];
             double costToSubstitute = distanceMatrix[row - 1][column - 1].cost;
             if (sourceElement != targetElement)
@@ -209,14 +210,14 @@ MinCostSubstringStruct levenshteinDistance(
 
             distanceMatrix[row][column] = CoordinateMatrixEntry({minCostParent->cost, Coordinates(), minCostParent->coordinates});
 
-            if (isUnrestrictedDamerau)
+            if (isUnrestrictedDamerau && sourceElement == targetElement)
             {
-                lastRowMap.emplace(sourceElement, row);
-                if (sourceElement == targetElement)
-                {
-                    lastColMatch = column;
-                }
+                lastColMatch = column;
             }
+        }
+        if (isUnrestrictedDamerau)
+        {
+            lastRowMap.emplace(sourceElement, row);
         }
     }
 

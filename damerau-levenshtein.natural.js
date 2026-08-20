@@ -146,6 +146,7 @@ function levenshteinDistance(source, target, options) {
   }
 
   for (var row = 1; row <= sourceLength; row++) {
+    var sourceElement = source[row - 1];
     if (isUnrestrictedDamerau) {
       var lastColMatch = null;
     }
@@ -155,7 +156,6 @@ function levenshteinDistance(source, target, options) {
       var costToDelete =
         distanceMatrix[row - 1][column].cost + options.deletion_cost;
 
-      var sourceElement = source[row - 1];
       var targetElement = target[column - 1];
       var costToSubstitute = distanceMatrix[row - 1][column - 1].cost;
       if (sourceElement !== targetElement) {
@@ -225,12 +225,12 @@ function levenshteinDistance(source, target, options) {
         parentCell: minCostParent.coordinates,
       };
 
-      if (isUnrestrictedDamerau) {
-        lastRowMap[sourceElement] = row;
-        if (sourceElement === targetElement) {
-          lastColMatch = column;
-        }
+      if (isUnrestrictedDamerau && sourceElement === targetElement) {
+        lastColMatch = column;
       }
+    }
+    if (isUnrestrictedDamerau) {
+      lastRowMap[sourceElement] = row;
     }
   }
 
