@@ -217,7 +217,7 @@ MinCostSubstringStruct levenshteinDistance(
         }
         if (isUnrestrictedDamerau)
         {
-            lastRowMap.emplace(sourceElement, row);
+            lastRowMap[sourceElement] = row;
         }
     }
 
